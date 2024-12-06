@@ -1,0 +1,16 @@
+@use './variables/_common';
+@use './variables/_light';
+@use './variables/_dark';
+
+.sakai-theme {
+    @import './_mixins';
+    @import './_preloading';
+    @import './_core';
+    @import './_main';
+    @import './_topbar';
+    @import './_menu';
+    @import './_footer';
+    @import './_responsive';
+    @import './_utils';
+    @import './_typography';
+}

@@ -1,0 +1,17 @@
+{
+    "dependencies": {
+        "chart.js": "^4.4.3",
+        "chartjs-plugin-datalabels": "^2.2.0",
+        "date-fns": "^3.6.0",
+        "nuxt": "^3.12.4",
+        "vue": "latest",
+        "yup": "^1.4.0"
+    },
+    "name": "main",
+    "private": true,
+    "type": "module",
+    "version": "1.0.0",
+    "devDependencies": {
+        "sass-embedded": "^1.80.7"
+    }
+}
