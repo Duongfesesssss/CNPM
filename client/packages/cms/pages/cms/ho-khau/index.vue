@@ -49,25 +49,22 @@
     </ToolBar>
 
     <DataTable
-      ref="dt"
       v-model:expandedRows="expandedRows"
       v-model:rows="filterProject.rows"
-      :first="filterProject.first"
-      data-key="id"
-      column-resize-mode="expand"
-      show-gridlines
-      :total-records="totalRecords"
-      :value="dataHoKhau"
-      removable-sort
-      :loading="loading"
-      :rows-per-page-options="[1, 10, 20, 50]"
-      :lazy="true"
-      sort-field="ngay_phathanh"
+      sort-field="ho_ten"
       :sort-order="-1"
+      :rows-per-page-options="[1, 10, 20, 50]"
+      column-resize-mode="expand"
+      removable-sort
+      show-gridlines
+      :lazy="true"
+      :value="dataHoKhau"
       paginator
-      scrollable
       paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-      current-page-report-template="hiển thị {first} đến {last} trong {totalRecords} kế hoạch"
+      current-page-report-template="hiển thị {first} đến {last} trong {totalRecords} công trình"
+      :total-records="totalRecords"
+      :loading="loading"
+      data-key="id"
       @page="onPage($event as PageEvent)"
       @sort="onSort($event as SortEvent)"
     >
@@ -185,7 +182,7 @@
         <template #body="slotProps">
           <div class="flex justify-center items-center space-x-4">
             <Button
-              v-tooltip="'Chỉnh sửa kế hoạch'"
+              v-tooltip="'Chỉnh sửa hộ khẩu'"
               icon="pi pi-pencil"
               outlined
               rounded
@@ -194,7 +191,7 @@
               @click="onEditProject(slotProps.data)"
             />
             <Button
-              v-tooltip="'Xoá kế hoạch'"
+              v-tooltip="'Xoá hộ khẩu'"
               icon="pi pi-trash"
               outlined
               rounded
@@ -235,7 +232,7 @@ const home = ref({
 
 
 const getRowSTT = (index: number): number => {
-  return filterProject.value.first + index + 1;
+  return currentPageNumber.value * 10 + index + 1;
 };
 
 
@@ -243,11 +240,11 @@ const toast = useToast();
 const dialog = useDialog();
 const confirm = useConfirm();
 const dataHoKhau = ref<HoKhauModel[]>([]);
+const items = ref([{ label: 'Quản lý' }, { label: 'Hộ khẩu' }]);
+const currentPageNumber = ref(0);
 
-
-const dt = ref();
 const totalRecords = ref(0);
-const filter = ref();
+const filters = ref();
 
 const schema = yup.object({
   keyWords: yup
@@ -259,19 +256,26 @@ const { defineField, handleSubmit, errors } = useForm({
   validationSchema: schema,
 });
 const [keyWords] = defineField('keyWords');
+
 const filterProject = ref({
   rows: 10,
   first: 0,
   page: 0,
-  keyword: '',
-  nam_tailieu: 0,
-  sortField: 'ngay_phathanh',
+  sortField: '',
   sortOrder: 'desc',
 });
 
+const initFilters = () => {
+  filters.value = {
+    keyword: '',
+  };
+};
 
+initFilters();
 
 const clearFilter = () => {
+  initFilters();
+  filterProject.value.first = 0;
   setTimeout(() => {
     reloadDataTable();
     keyWords.value = '';
@@ -283,28 +287,32 @@ const loading = ref(false);
 
 const onLoadTable = () => {
   loading.value = true;
-  HoKhauService.HoKhauDataTable()
+  HoKhauService.HoKhauDataTable( Object.assign(filterProject.value, filters.value))
     .then((res) => {
-      console.log(res);
-      dataHoKhau.value = res?.data || [];
-      totalRecords.value = res?.totalRecords ?? 0;
-      console.log(totalRecords);
+      if (res) {
+        dataHoKhau.value = res.data || [];
+        totalRecords.value = res.totalRecords ?? 0;
+      }
     })
     .catch((error) => {
       console.error('Error loading data:', error);
     })
     .finally(() => {
       loading.value = false;
+      expandedRows.value = null;
     });
 };
 
+
 const reloadDataTable = () => {
   loading.value = true;
+  expandedRows.value = [];
   onLoadTable();
 };
 
 
 const onPage = (event: PageEvent) => {
+  currentPageNumber.value = event.page;
   filterProject.value.first = event.first;
   reloadDataTable();
 };
@@ -325,7 +333,7 @@ onMounted(() => {
 });
 
 const timKiem = handleSubmit(async () => {
-  filter.value.keyword = keyWords.value;
+  filters.value.keyword = keyWords.value;
   filterProject.value.first = 0;
   reloadDataTable();
 });

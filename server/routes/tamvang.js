@@ -2,16 +2,15 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const hoKhauSchema = new mongoose.Schema({}, { collection: 'DanhSachHoKhau' });
-const HoKhau = mongoose.model('HoKhau', hoKhauSchema);
+const tamVangSchema = new mongoose.Schema({}, { collection: 'TamVang' });
+const TamVang = mongoose.model('TamVang', tamVangSchema);
 
-// Route lấy thông tin hộ khẩu
 router.get('/', async (req, res) => {
     try {
-        const hoKhauList = await HoKhau.find({});
+        const tamVangList = await TamVang.find({});
         res.status(200).json({
             success: true,
-            data: hoKhauList,
+            data: tamVangList,
         });
     } catch (error) {
         console.error('Error fetching ho khau:', error);
@@ -25,10 +24,10 @@ router.get('/', async (req, res) => {
 router.post('/datatable', async (req, res) => {
     try {
         const { page = 0, rows = 10 } = req.body; 
-        const first = req.body.first;
+        const first = page * rows;
 
-        const totalRecords = await HoKhau.countDocuments();
-        const hoKhauList = await HoKhau.find({})
+        const totalRecords = await TamVang.countDocuments();
+        const tamVangList = await TamVang.find({})
             .skip(first)
             .limit(Number(rows));
 
@@ -36,7 +35,7 @@ router.post('/datatable', async (req, res) => {
 
         res.status(200).json({
             success: true,
-            data: hoKhauList,
+            data: tamVangList,
             rows: Number(rows),
             first: first,
             page: page,

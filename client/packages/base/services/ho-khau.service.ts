@@ -6,22 +6,29 @@ import type { HoKhauModel } from '../models/dto/response/ho-khau/ho-khau.model';
 import { BaseService } from './base.service';
 
 class _HoKhauService extends BaseService {
-  async HoKhauDataTable(
-  ) {
-    const res = await $api<RestPagedDataTable<HoKhauModel[]>>('/api/ho-khau/datatable', {
+  async HoKhauDataTable(filterProject) {
+    try {
+      // Gửi các tham số phân trang và sắp xếp qua body
+      const res = await $api<RestPagedDataTable<HoKhauModel[]>>('/api/ho-khau/datatable', {
         method: 'POST',
-        body: {},
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(filterProject)
       });
-    
-    if (res) {
-      return res;
-      console.log('Response:', res);
 
+      // Kiểm tra và trả về dữ liệu
+      if (res) {
+        return res;
+      }
+      console.error('Không nhận được phản hồi từ server:', res);
+      return null;
+    } catch (error) {
+      console.error('Lỗi khi gọi API HoKhauDataTable:', error);
+      throw error;
     }
-    return null;
   }
-
 }
 
+// Tạo instance duy nhất cho service
 const HoKhauService = new _HoKhauService();
 export { HoKhauService };
+

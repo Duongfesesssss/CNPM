@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 8888;
 const authRoutes = require("./routes/auth");
 const hoKhauRoutes = require("./routes/hokhau");
+const tamVangRoutes = require("./routes/tamvang");
 const cors = require('cors');
 
 app.use(cors({ origin: process.env.BASE_URL || `http://localhost:${port}` }));
@@ -23,6 +24,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 
 app.use('/api/ho-khau', hoKhauRoutes);
+app.use('/api/tam-vang', tamVangRoutes);
+
 
 // Cấu hình Swagger
 const swaggerOptions = {
