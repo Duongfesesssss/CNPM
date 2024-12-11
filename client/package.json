@@ -13,10 +13,12 @@
     "nuxt": "^3.14.0",
     "primevue": "^4.2.1",
     "sass": "^1.81.0",
+    "vee-validate": "^4.14.7",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "yup": "^1.5.0"
   },
   "devDependencies": {
-    "sass-embedded": "^1.81.0"
+    "sass-embedded": "^1.82.0"
   }
 }

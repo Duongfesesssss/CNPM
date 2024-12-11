@@ -85,12 +85,12 @@ export default defineNuxtConfig({
   components: true,
   runtimeConfig: {
     public: {
-      baseURL: 'http://localhost:3000/',
+      baseURL: 'http://localhost:8888/',
     },
   },
   routeRules: {
     '/api/**': {
-      proxy: 'http://localhost:3000/api/**',
+      proxy: 'http://localhost:8888/api/**',
     },
   },
   

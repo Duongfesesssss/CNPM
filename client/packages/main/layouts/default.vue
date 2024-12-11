@@ -99,7 +99,7 @@ const items = ref([
       <NuxtPage />
     </main>
     <!-- end page-content -->
-    <SharedMainFooter />
+ 
     <div id="sub-menu-sp">
       <div
         id="smartphone-menu"

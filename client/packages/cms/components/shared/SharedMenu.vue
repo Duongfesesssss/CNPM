@@ -11,24 +11,14 @@ const model = ref([
     label: 'Quản lý',
     items: [
       {
-        label: 'Sự kiện thiên tai',
+        label: 'Hộ khẩu',
         icon: 'pi pi-fw pi-bolt',
-        to: '/cms/sukien-thientai',
+        to: '/cms/ho-khau',
       },
       {
-        label: 'Danh sách cơn bão',
-        icon: 'pi pi-cloud',
-        to: '/cms/storm',
-      },
-      {
-        label: 'Đường đi của bão',
-        icon: 'pi pi-file',
-        to: '/cms/storm-route',
-      },
-      {
-        label: 'Trạm quan trắc',
-        icon: 'pi pi-database',
-        to: '/cms/tram-quantrac',
+        label: 'Test book',
+        icon: 'pi pi-fw pi-bolt',
+        to: '/cms/book',
       },
       {
         label: 'Hệ thống',
@@ -46,11 +36,6 @@ const model = ref([
             to: '/cms/user',
           },
         ],
-      },
-      {
-        label: 'Danh bạ',
-        icon: 'pi pi-address-book',
-        to: '/cms/danh-ba',
       },
     ],
     separator: null,

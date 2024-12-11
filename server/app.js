@@ -5,6 +5,7 @@ const swaggerUi = require('swagger-ui-express');
 const app = express();
 const port = process.env.PORT || 8888;
 const authRoutes = require("./routes/auth");
+const hoKhauRoutes = require("./routes/hokhau");
 const cors = require('cors');
 
 app.use(cors({ origin: process.env.BASE_URL || `http://localhost:${port}` }));
@@ -15,11 +16,13 @@ connectToDB();
 
 // Route cho đường dẫn gốc
 app.get('/', (req, res) => {
-  res.send('Welcome to the API!');
+    res.send('Welcome to the API!');
 });
 
 // Sử dụng routes auth
 app.use('/api/auth', authRoutes);
+
+app.use('/api/ho-khau', hoKhauRoutes);
 
 // Cấu hình Swagger
 const swaggerOptions = {
