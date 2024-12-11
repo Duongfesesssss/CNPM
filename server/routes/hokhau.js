@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const hoKhauSchema = new mongoose.Schema({}, { collection: 'DanhSachHoKhau' });
 const HoKhau = mongoose.model('HoKhau', hoKhauSchema);
 
-// Route lấy thông tin hộ khẩu
 router.get('/', async (req, res) => {
     try {
         const hoKhauList = await HoKhau.find({});
@@ -48,6 +47,82 @@ router.post('/datatable', async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Lỗi server. Không thể lấy thông tin DataTable.',
+        });
+    }
+});
+
+router.post('/', async (req, res) => {
+    try {
+        const newRecord = new HoKhau(req.body);
+        const savedRecord = await newRecord.save();
+        res.status(201).json({
+            success: true,
+            data: savedRecord,
+            message: 'Thêm mới hộ khẩu thành công.',
+        });
+    } catch (error) {
+        console.error('Không thể thêm mới hộ khẩu', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server. Không thể thêm mới hộ khẩu.',
+        });
+    }
+});
+
+router.delete('/', async (req, res) => {
+    try {
+        const { id } = req.body;
+        const deletedRecord = await HoKhau.findByIdAndDelete(id);
+
+        if (!deletedRecord) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy hộ khẩu với ID đã cung cấp.',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: deletedRecord,
+            message: 'Xóa hộ khẩu thành công.',
+        });
+    } catch (error) {
+        console.error('Không thể xóa hộ khẩu', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server. Không thể xóa hộ khẩu.',
+        });
+    }
+});
+
+// Route chỉnh sửa hộ khẩu theo ID
+router.put('/', async (req, res) => {
+    try {
+        const { id } = req.body;
+        const updatedData = req.body;
+
+        const updatedRecord = await HoKhau.findByIdAndUpdate(id, updatedData, {
+            new: true,
+            runValidators: true,
+        });
+
+        if (!updatedRecord) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy hộ khẩu với ID đã cung cấp.',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: updatedRecord,
+            message: 'Cập nhật hộ khẩu thành công.',
+        });
+    } catch (error) {
+        console.error('Không thể cập nhật hộ khẩu', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server. Không thể cập nhật hộ khẩu.',
         });
     }
 });
