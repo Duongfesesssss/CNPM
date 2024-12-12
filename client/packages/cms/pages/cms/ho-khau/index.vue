@@ -42,6 +42,7 @@
               label="Thêm mới"
               icon="pi pi-plus"
               class="mr-2"
+              @click="onModalOpen"
             />
           </div>
         </div>
@@ -188,7 +189,7 @@
               rounded
               severity="warn"
               class="mr-2"
-              @click="onEditProject(slotProps.data)"
+              @click="onModalOpenEdit(slotProps.data)"
             />
             <Button
               v-tooltip="'Xoá hộ khẩu'"
@@ -203,6 +204,14 @@
         </template>
       </Column>
     </DataTable>
+    <ClientOnly>
+      <HoKhauModal
+        :is-visible="isOpenModal"
+        :ho-khau="hoKhauData"
+        @reload-data-table="reloadDataTable()"
+        @hide-modal="isOpenModal = false"
+      />
+    </ClientOnly>
   </div>
 </template>
 
@@ -212,10 +221,10 @@ import { useForm } from 'vee-validate';
 import { useToast } from 'primevue/usetoast';
 import { useDialog } from 'primevue/usedialog';
 import { useConfirm } from 'primevue/useconfirm';
-import type { RouteLocationPathRaw } from 'vue-router';
 import type { PageEvent, SortEvent } from '~/packages/base/models/event';
 import { HoKhauService } from '~/packages/base/services/ho-khau.service';
-import type { HoKhauModel } from '~/packages/base/models/dto/response/ho-khau/ho-khau.model';
+import { HoKhauModel } from '~/packages/base/models/dto/response/ho-khau/ho-khau.model';
+import HoKhauModal from '~/packages/cms/components/shared/ho-khau/HoKhauModal.vue';
 
 definePageMeta({
   layout: 'cms-default',
@@ -242,6 +251,9 @@ const confirm = useConfirm();
 const dataHoKhau = ref<HoKhauModel[]>([]);
 const items = ref([{ label: 'Quản lý' }, { label: 'Hộ khẩu' }]);
 const currentPageNumber = ref(0);
+const isOpenModal = ref<boolean>(false);
+const hoKhauData = ref<HoKhauModel>(new HoKhauModel());
+
 
 const totalRecords = ref(0);
 const filters = ref();
@@ -337,6 +349,18 @@ const timKiem = handleSubmit(async () => {
   filterProject.value.first = 0;
   reloadDataTable();
 });
+
+const onModalOpen = () => {
+  isOpenModal.value = true;
+  hoKhauData.value = new HoKhauModel();
+  console.log('open');
+};
+
+const onModalOpenEdit = (data: HoKhauModel) => {
+  isOpenModal.value = true;
+  hoKhauData.value = data;
+};
+
 </script>
 
 <style lang="scss" scoped></style>
