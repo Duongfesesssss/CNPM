@@ -100,6 +100,8 @@ router.delete('/', async (req, res) => {
 router.put('/', async (req, res) => {
   try {
     const { id } = req.body;
+    console.log(1);
+
     const updatedData = req.body;
 
     const updatedRecord = await HoKhau.findByIdAndUpdate(id, updatedData, {
