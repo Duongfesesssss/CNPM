@@ -47,7 +47,7 @@ const [ngay_cap] = defineField('ngay_cap');
 
 const onSubmit = handleSubmit(async () => {
   const hoKhauDTO = {
-    _id: id.value ?? '0',
+    _id: id.value,
     ma_ho_khau: ma_ho_khau.value,
     so_thanh_vien: so_thanh_vien.value,
     dia_chi_thuong_tru: dia_chi_thuong_tru.value,
@@ -59,14 +59,14 @@ const onSubmit = handleSubmit(async () => {
   ConfirmDialog.showConfirmDialog(
     confirm,
     `${
-      hoKhauDTO.id != null && hoKhauDTO.id > 0
+      hoKhauDTO._id != null
         ? 'Bạn có chắc muốn cập nhật thông tin cơn bão này?'
         : 'Bạn có chắc muốn thêm thông tin cơn bão này?'
     }`,
     'Xác nhận',
     'pi pi-question-circle',
     () => {
-      if (hoKhauDTO.id != null && hoKhauDTO.id > 0) {
+      if (hoKhauDTO._id != null && hoKhauDTO._id > 0) {
         HoKhauService.update(hoKhauDTO as HoKhauModel)
           .then((response) => {
             if (response?.status == EnumStatus.OK) {
@@ -158,8 +158,8 @@ watch(
 );
 
 watchEffect(() => {
-  if (thongTin.value?.id != undefined) {
-    id.value = thongTin.value.id;
+  if (thongTin.value?._id != undefined) {
+    id.value = thongTin.value._id;
     ma_ho_khau.value = thongTin.value?.ma_ho_khau;
     so_thanh_vien.value = thongTin.value?.so_thanh_vien;
     dia_chi_thuong_tru.value = thongTin.value?.dia_chi_thuong_tru;
