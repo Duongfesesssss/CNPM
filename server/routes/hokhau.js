@@ -50,20 +50,25 @@ router.post('/', async (req, res) => {
   try {
     const newRecord = new HoKhau(req.body);
     const savedRecord = await newRecord.save();
+
+    // Trả về định dạng yêu cầu khi thành công
     res.status(201).json({
-      success: true,
-      data: savedRecord,
-      message: 'Thêm mới hộ khẩu thành công.',
+      status: 'OK',
+      metadata: null,
     });
   } catch (error) {
     if (error.code === 11000) {
+      // Lỗi trùng lặp
       res.status(400).json({
-        success: false,
+        status: 'ERROR',
+        metadata: null,
         message: 'Mã hộ khẩu đã tồn tại.',
       });
     } else {
+      // Lỗi server
       res.status(500).json({
-        success: false,
+        status: 'ERROR',
+        metadata: null,
         message: 'Lỗi server. Không thể thêm mới hộ khẩu.',
       });
     }
@@ -73,24 +78,34 @@ router.post('/', async (req, res) => {
 router.delete('/', async (req, res) => {
   try {
     const { _id } = req.body;
+
+    if (!_id) {
+      return res.status(400).json({
+        status: 'ERROR',
+        metadata: null,
+        message: 'Vui lòng cung cấp _id của bản ghi cần xóa.',
+      });
+    }
+
     const deletedRecord = await HoKhau.findByIdAndDelete(_id);
 
     if (!deletedRecord) {
       return res.status(404).json({
-        success: false,
-        message: 'Không tìm thấy hộ khẩu với ID đã cung cấp.',
+        status: 'ERROR',
+        metadata: null,
+        message: 'Không tìm thấy hộ khẩu với _id đã cung cấp.',
       });
     }
 
     res.status(200).json({
-      success: true,
-      data: deletedRecord,
-      message: 'Xóa hộ khẩu thành công.',
+      status: 'OK',
+      metadata: null,
     });
   } catch (error) {
     console.error('Không thể xóa hộ khẩu', error);
     res.status(500).json({
-      success: false,
+      status: 'ERROR',
+      metadata: null,
       message: 'Lỗi server. Không thể xóa hộ khẩu.',
     });
   }

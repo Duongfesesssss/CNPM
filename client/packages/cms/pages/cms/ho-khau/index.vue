@@ -111,10 +111,10 @@
           <span class="font-bold">Không có hộ khẩu nào!</span>
         </div>
       </template>
-      <Column
+      <!-- <Column
         expander
         style="padding: 10px; width: 2rem"
-      />
+      /> -->
       <Column
         class="text-center"
         body-style="text-align:center"
@@ -353,12 +353,42 @@ const timKiem = handleSubmit(async () => {
 const onModalOpen = () => {
   isOpenModal.value = true;
   hoKhauData.value = new HoKhauModel();
-  console.log('open');
 };
 
 const onModalOpenEdit = (data: HoKhauModel) => {
   isOpenModal.value = true;
   hoKhauData.value = data;
+};
+
+const confirmDeleteProject = (props: HoKhauModel) => {
+  ConfirmDialog.showConfirmDialog(
+    confirm,
+    'Bạn có muốn xóa thông tin hộ khẩu này?',
+    'Xác nhận',
+    'pi pi-question-circle',
+    () => {
+      HoKhauService.delete(props).then((result) => {
+        if (result?.status == EnumStatus.OK) {
+          toast.add({
+            severity: 'success',
+            summary: 'Xóa thông tin hộ khẩu thành công !',
+            life: 3000,
+          });
+          reloadDataTable();
+        }
+        else {
+          toast.add({
+            severity: 'error',
+            summary: 'Xóa thông tin hộ khẩu thất bại !',
+            life: 3000,
+          });
+        }
+      });
+    },
+    () => {},
+    '',
+    ' p-button-danger',
+  );
 };
 
 </script>

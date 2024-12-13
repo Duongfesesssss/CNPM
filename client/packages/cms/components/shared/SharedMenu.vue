@@ -16,6 +16,11 @@ const model = ref([
         to: '/cms/ho-khau',
       },
       {
+        label: 'Căn hộ',
+        icon: 'pi pi-fw pi-bolt',
+        to: '/cms/can-ho',
+      },
+      {
         label: 'Test book',
         icon: 'pi pi-fw pi-bolt',
         to: '/cms/book',

@@ -59,6 +59,44 @@ class _HoKhauService extends BaseService {
 
     return null;
   }
+
+  async update(entity: HoKhauModel) {
+    const response = await $api<RestPagedDataTable<HoKhauModel[]>>(
+      `/api/ho-khau`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(entity),
+      },
+    );
+
+    if (response) {
+      return response;
+    }
+
+    return null;
+  }
+
+  async delete(entity: HoKhauModel) {
+    const response = await $api<RestPagedDataTable<HoKhauModel[]>>(
+      `/api/ho-khau`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(entity),
+      },
+    );
+
+    if (response) {
+      return response;
+    }
+
+    return null;
+  }
 }
 
 // Tạo instance duy nhất cho service
