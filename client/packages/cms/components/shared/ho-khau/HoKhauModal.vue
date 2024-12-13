@@ -47,7 +47,7 @@ const [ngay_cap] = defineField('ngay_cap');
 
 const onSubmit = handleSubmit(async () => {
   const hoKhauDTO = {
-    _id: id.value,
+    id: id.value,
     ma_ho_khau: ma_ho_khau.value,
     so_thanh_vien: so_thanh_vien.value,
     dia_chi_thuong_tru: dia_chi_thuong_tru.value,
@@ -55,18 +55,18 @@ const onSubmit = handleSubmit(async () => {
     ngay_cap: ngay_cap.value,
   };
 
-  console.log(hoKhauDTO);
+  console.log(hoKhauDTO.ma_ho_khau);
   ConfirmDialog.showConfirmDialog(
     confirm,
     `${
-      hoKhauDTO._id != null
+      hoKhauDTO.ma_ho_khau
         ? 'Bạn có chắc muốn cập nhật thông tin cơn bão này?'
         : 'Bạn có chắc muốn thêm thông tin cơn bão này?'
     }`,
     'Xác nhận',
     'pi pi-question-circle',
     () => {
-      if (hoKhauDTO._id != null && hoKhauDTO._id > 0) {
+      if (hoKhauDTO.ma_ho_khau != null) {
         HoKhauService.update(hoKhauDTO as HoKhauModel)
           .then((response) => {
             if (response?.status == EnumStatus.OK) {
