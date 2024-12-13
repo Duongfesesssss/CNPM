@@ -72,8 +72,8 @@ router.post('/', async (req, res) => {
 
 router.delete('/', async (req, res) => {
   try {
-    const { id } = req.body;
-    const deletedRecord = await HoKhau.findByIdAndDelete(id);
+    const { _id } = req.body;
+    const deletedRecord = await HoKhau.findByIdAndDelete(_id);
 
     if (!deletedRecord) {
       return res.status(404).json({
@@ -99,12 +99,10 @@ router.delete('/', async (req, res) => {
 // Route chỉnh sửa hộ khẩu theo ID
 router.put('/', async (req, res) => {
   try {
-    const { id } = req.body;
-    console.log(1);
-
+    const { _id } = req.body;
     const updatedData = req.body;
 
-    const updatedRecord = await HoKhau.findByIdAndUpdate(id, updatedData, {
+    const updatedRecord = await HoKhau.findByIdAndUpdate(_id, updatedData, {
       new: true,
       runValidators: true,
     });
@@ -122,7 +120,6 @@ router.put('/', async (req, res) => {
       message: 'Cập nhật hộ khẩu thành công.',
     });
   } catch (error) {
-    console.error('Không thể cập nhật hộ khẩu', error);
     res.status(500).json({
       success: false,
       message: 'Lỗi server. Không thể cập nhật hộ khẩu.',
