@@ -1,29 +1,46 @@
-<template>
+<template @submit.prevent="doLogin">
   <form>
     <div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
       <div class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border w-full lg:w-6/12 mx-auto">
         <div class="text-center mb-8">
-          <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome Back</div>
-          <span class="text-surface-600 dark:text-surface-200 font-medium leading-normal">Don't have an account?</span>
-          <a class="font-medium no-underline ml-2 text-primary cursor-pointer">Create today!</a>
+          <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Chào mừng bạn quay trở lại</div>
+          <span class="text-surface-600 dark:text-surface-200 font-medium leading-normal">Không có tài khoản?</span>
+          <a class="font-medium no-underline ml-2 text-primary cursor-pointer">Hãy tạo tài khoản tại đây!</a>
         </div>
 
         <div>
+          <!-- Email -->
           <label for="email1" class="text-surface-900 dark:text-surface-0 font-medium mb-2 block">Email</label>
-          <InputText v-model="loginEmail" id="email1" type="text" placeholder="Email address" class="w-full mb-4" />
+          <InputText
+            v-model="loginEmail"
+            id="email1"
+            type="email"
+            placeholder="Nhập email của bạn"
+            class="w-full mb-2"
+            :class="{ 'p-invalid': loginErrors.email }"
+          />
+          <span v-if="loginErrors.email" class="text-red-500 text-sm mb-4 block">{{ loginErrors.email }}</span>
 
-          <label for="password1" class="text-surface-900 dark:text-surface-0 font-medium mb-2 block">Password</label>
-          <InputText v-model="loginPassword" id="password1" type="password" placeholder="Password" class="w-full mb-4" />
-
+          <!-- Mật khẩu -->
+          <label for="password1" class="text-surface-900 dark:text-surface-0 font-medium mb-2 block">Mật khẩu</label>
+          <InputText
+            v-model="loginPassword"
+            id="password1"
+            type="password"
+            placeholder="Nhập mật khẩu"
+            class="w-full mb-2"
+            :class="{ 'p-invalid': loginErrors.password }"
+          />
+          <span v-if="loginErrors.password" class="text-red-500 text-sm mb-4 block">{{ loginErrors.password }}</span>
           <div class="flex items-center justify-between mb-12">
             <div class="flex items-center">
               <Checkbox v-model="checked1" id="rememberme1" :binary="true" class="mr-2" />
               <label for="rememberme1">Remember me</label>
             </div>
-            <a class="font-medium no-underline ml-2 text-primary text-right cursor-pointer">Forgot password?</a>
+            <a class="font-medium no-underline ml-2 text-primary text-right cursor-pointer">Quên mật khẩu?</a>
           </div>
 
-          <Button label="Sign In" icon="pi pi-user" class="w-full" @click="doLogin" />
+          <Button label="Đăng nhập" icon="pi pi-user" class="w-full" @click="doLogin" />
         </div>
       </div>
     </div>
@@ -33,8 +50,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useForm } from 'vee-validate';
+import { Field, Form, ErrorMessage, useForm } from 'vee-validate';
 import * as yup from 'yup';
+import { useToast } from 'primevue/usetoast';
 import { AuthService } from '~/packages/base/services/auth.service';
 
 definePageMeta({
@@ -57,8 +75,8 @@ const openClickInfoModal = () => {
 const loginSchema = yup.object({
   email: yup
     .string()
-    .required('Vui lòng nhập tài khoản!')
-    .min(2, 'Tài khoản phải có ít nhất 2 ký tự!'),
+    .email('Email không hợp lệ!')
+    .required('Vui lòng nhập tài khoản!'),
   password: yup
     .string()
     .required('Vui lòng nhập mật khẩu!')
@@ -155,5 +173,15 @@ const doLogin = handleLoginSubmit(async () => {
   }
 });
 
-  
+
 </script>
+
+<style scoped>
+.p-invalid {
+  border-color: #f56565 !important;
+  box-shadow: 0 0 0 1px #f56565;
+}
+.text-red-500 {
+  color: #f56565;
+}
+</style>

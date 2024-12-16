@@ -2,6 +2,14 @@ import Aura from '@primevue/themes/aura';
 import { defaultOptions } from 'primevue/config';
 import path from 'path';
 export default defineNuxtConfig({
+    build: {
+      transpile: ['@nuxtjs/tailwindcss']
+    },
+    vite: {
+      optimizeDeps: {
+        include: ['@nuxtjs/tailwindcss']
+      }
+    },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
   app: {
