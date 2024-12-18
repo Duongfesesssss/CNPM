@@ -12,6 +12,7 @@ const khoanThuRoutes = require('./routes/khoanthu');
 const loaiXeRoutes = require('./routes/loaixe');
 const khoanThuTheoHoRoutes = require('./routes/khoanthutheoho');
 const tamVangRoutes = require('./routes/tamvang');
+const nhankhauRoutes = require('./routes/nhankhau');
 
 const cors = require('cors');
 
@@ -36,6 +37,7 @@ app.use('/api/khoan-thu', khoanThuRoutes);
 app.use('/api/loai-xe', loaiXeRoutes);
 app.use('/api/khoan-thu-theo-ho', khoanThuTheoHoRoutes);
 app.use('/api/tam-vang', tamVangRoutes);
+app.use('/api/nhan-khau', nhankhauRoutes);
 
 // Cấu hình Swagger
 const swaggerOptions = {

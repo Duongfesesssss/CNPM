@@ -4,12 +4,10 @@ const KhoanThuSchema = new mongoose.Schema(
   {
     ma_khoanthu: {
       type: Number,
-      required: true,
       unique: true, // Mã khoản thu phải duy nhất
     },
     ten_khoanthu: {
       type: String,
-      required: true,
       trim: true, // Loại bỏ khoảng trắng thừa
     },
     chi_tiet: {
@@ -24,16 +22,14 @@ const KhoanThuSchema = new mongoose.Schema(
     },
     loai_hoatdong: {
       type: String,
-      required: true,
       trim: true,
     },
     thoigian_batdau: {
       type: Date,
-      required: true,
     },
     thoigian_ketthuc: {
       type: Date,
-      required: true,
+
       validate: {
         validator: function (value) {
           return value > this.thoigian_batdau;

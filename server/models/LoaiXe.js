@@ -10,7 +10,6 @@ const LoaiXeSchema = new mongoose.Schema(
     },
     ten_loaixe: {
       type: String,
-      required: true,
       trim: true,
     },
     mo_ta: {
@@ -20,7 +19,6 @@ const LoaiXeSchema = new mongoose.Schema(
     },
     dich_vu: {
       type: String,
-      required: true,
       trim: true,
     },
   },

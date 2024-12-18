@@ -18,12 +18,10 @@ const HoaDonSchema = new mongoose.Schema(
     },
     sotien_danop: {
       type: Number,
-      required: true,
       min: 0, // Đảm bảo số tiền không âm
     },
     ten_hoadon: {
       type: String,
-      required: true,
     },
   },
   { collection: 'HoaDon' }
