@@ -206,7 +206,7 @@
       <ClientOnly>
         <CanHoModal
           :is-visible="isOpenModal"
-          :ho-khau="hoKhauData"
+          :can-ho="hoKhauData"
           @reload-data-table="reloadDataTable()"
           @hide-modal="isOpenModal = false"
         />
@@ -221,11 +221,9 @@
   import { useDialog } from 'primevue/usedialog';
   import { useConfirm } from 'primevue/useconfirm';
   import type { PageEvent, SortEvent } from '~/packages/base/models/event';
-  import { HoKhauService } from '~/packages/base/services/ho-khau.service';
-  import { HoKhauModel } from '~/packages/base/models/dto/response/ho-khau/ho-khau.model';
-  import HoKhauModal from '~/packages/cms/components/shared/ho-khau/HoKhauModal.vue';
-import { CanHoService } from '../../../../base/services/can-ho.service';
-import CanHoModal from '~/packages/cms/components/shared/can-ho/CanHoModal.vue';
+  import { CanHoModel } from '~/packages/base/models/dto/response/can-ho/can-ho.model';
+  import { CanHoService } from '../../../../base/services/can-ho.service';
+  import CanHoModal from '~/packages/cms/components/shared/can-ho/CanHoModal.vue';
   
   definePageMeta({
     layout: 'cms-default',
@@ -249,11 +247,11 @@ import CanHoModal from '~/packages/cms/components/shared/can-ho/CanHoModal.vue';
   const toast = useToast();
   const dialog = useDialog();
   const confirm = useConfirm();
-  const dataHoKhau = ref<HoKhauModel[]>([]);
+  const dataHoKhau = ref<CanHoModel[]>([]);
   const items = ref([{ label: 'Quản lý' }, { label: 'Căn hộ' }]);
   const currentPageNumber = ref(0);
   const isOpenModal = ref<boolean>(false);
-  const hoKhauData = ref<HoKhauModel>(new HoKhauModel());
+  const hoKhauData = ref<CanHoModel>(new CanHoModel());
   
   
   const totalRecords = ref(0);
@@ -353,22 +351,25 @@ import CanHoModal from '~/packages/cms/components/shared/can-ho/CanHoModal.vue';
   
   const onModalOpen = () => {
     isOpenModal.value = true;
-    hoKhauData.value = new HoKhauModel();
+    hoKhauData.value = new CanHoModel();
+    console.log(hoKhauData);
   };
   
-  const onModalOpenEdit = (data: HoKhauModel) => {
+  const onModalOpenEdit = (data: CanHoModel) => {
     isOpenModal.value = true;
     hoKhauData.value = data;
+    console.log(hoKhauData.value); 
   };
   
-  const confirmDeleteProject = (props: HoKhauModel) => {
+  const confirmDeleteProject = (props: CanHoModel) => {
     ConfirmDialog.showConfirmDialog(
       confirm,
       'Bạn có muốn xóa thông tin căn hộ này?',
       'Xác nhận',
       'pi pi-question-circle',
       () => {
-        HoKhauService.delete(props).then((result) => {
+        CanHoService.delete(props).then((result) => {
+          console.log(result);
           if (result?.status == EnumStatus.OK) {
             toast.add({
               severity: 'success',

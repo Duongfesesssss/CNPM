@@ -8,6 +8,7 @@ const CanHoSchema = new mongoose.Schema(
     so_phong: { type: String,},
     mo_ta: { type: String },
     ten_canho: { type: String},
+    trang_thai: {type: Boolean, default: false},
   },
   { collection: 'CanHo' }
 );

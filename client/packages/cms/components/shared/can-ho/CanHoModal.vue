@@ -27,7 +27,6 @@ const internalVisible = computed({
   },
 });
 
-
 const schema = yup.object({
   
 });
@@ -150,8 +149,8 @@ watch(
   () => props.isVisible,
   () => {
     if (props.isVisible) {
+      console.log(props.canHo);
       thongTin.value = props.canHo;
-      console.log('thongtin bao', thongTin);
     }
   },
   { immediate: true },
@@ -171,7 +170,15 @@ watchEffect(() => {
 
 const emit = defineEmits(['hideModal', 'reloadDataTable']);
 
+
+
 const handleHideModal = () => {
+
+    if(props.canHo._id){
+      resetForm();
+  }
+  // if(props.canHo._id === undefined){
+  // }
   emit('hideModal');
 };
 </script>
@@ -182,7 +189,7 @@ const handleHideModal = () => {
       v-model:visible="internalVisible"
       class="w-[320px] sm:w-[800px]"
       :header="`${
-        props.canHo?.id === null || props.canHo?.id === undefined
+        props.canHo?._id === undefined
           ? 'Thêm mới '
           : 'Cập nhật '
       } thông tin căn hộ`"

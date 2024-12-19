@@ -50,19 +50,18 @@ router.post('/datatable', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const newCanHo = new CanHo(req.body);
-    console.log(newCanHo);
     const savedCanHo = await newCanHo.save();
 
     res.status(201).json({
-      success: true,
       data: savedCanHo,
-      message: 'Thêm mới căn hộ thành công.',
+      status: 'OK',
+      metadata: null,
     });
   } catch (error) {
     console.error('Lỗi khi thêm mới căn hộ:', error);
     res.status(500).json({
-      success: false,
-      message: 'Lỗi server. Không thể thêm mới căn hộ.',
+      status: 'ERROR',
+      metadata: null,
     });
   }
 });
@@ -70,17 +69,20 @@ router.post('/', async (req, res) => {
 router.delete('/', async (req, res) => {
   try {
     const { _id } = req.body;
+    console.log(_id);
     const deletedRecord = await CanHo.findByIdAndDelete(_id);
 
     if (!deletedRecord) {
       return res.status(404).json({
-        success: false,
-        message: 'Không tìm thấy căn hộ với ID đã cung cấp.',
+        status: 'ERROR',
+        metadata: null,
+        message: 'Vui lòng cung cấp _id của bản ghi cần xóa.',
       });
     }
 
     res.status(200).json({
-      success: true,
+      status: 'OK',
+      metadata: null,
       data: null,
       message: 'Xóa căn hộ thành công.',
     });
@@ -88,6 +90,7 @@ router.delete('/', async (req, res) => {
     console.error('Không thể xóa căn hộ', error);
     res.status(500).json({
       success: false,
+      status: 'ERROR',
       message: 'Lỗi server. Không thể xóa căn hộ.',
     });
   }
