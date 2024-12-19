@@ -49,17 +49,8 @@ router.post('/datatable', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    // Kiểm tra xem `ho_khau` có tồn tại không
-    const hoKhau = await HoKhau.findById(req.body.ho_khau);
-    if (!hoKhau) {
-      return res.status(404).json({
-        success: false,
-        message: 'Hộ khẩu không tồn tại.',
-      });
-    }
-
-    // Tạo mới Căn Hộ
     const newCanHo = new CanHo(req.body);
+    console.log(newCanHo);
     const savedCanHo = await newCanHo.save();
 
     res.status(201).json({

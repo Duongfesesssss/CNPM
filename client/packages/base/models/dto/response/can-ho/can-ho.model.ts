@@ -8,6 +8,8 @@ class CanHoModel {
     mo_ta?: string;
     noi_cap?: string;
     ten_canho?: string;
+    so_phong?: string;
+    trang_thai?: boolean;
   }
 
   export { CanHoModel };

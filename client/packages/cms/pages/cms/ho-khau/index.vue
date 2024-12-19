@@ -134,11 +134,11 @@
       />
       <Column
         field="so_thanh_vien"
-        header="Số thành viên"
+        header="Chủ hộ"
         sortable
       >
         <template #body="slotProps">
-          <b>{{ slotProps.data.so_thanh_vien }}</b>
+          <b>{{ slotProps.data.chuHo?.ho_ten ?? '' }}</b>
         </template>
       </Column>
       <Column

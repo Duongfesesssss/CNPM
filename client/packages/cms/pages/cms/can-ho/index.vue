@@ -128,39 +128,38 @@
         </Column>
   
         <Column
-          field="ma_ho_khau"
-          header="Số căn hộ"
+          field="ten_canho"
+          header="Tên căn hộ"
           sortable
         />
         <Column
-          field="so_thanh_vien"
-          header="Số thành viên"
+          field="so_phong"
+          header="Số phòng"
           sortable
         >
-          <template #body="slotProps">
+          <!-- <template #body="slotProps">
             <b>{{ slotProps.data.so_thanh_vien }}</b>
-          </template>
+          </template> -->
         </Column>
         <Column
-          field="dia_chi_thuong_tru"
-          header="Địa chỉ thường trú"
+          field="dien_tich"
+          header="Diện tích phòng"
           sortable
         >
-        <template #body="slotProps">
+        <!-- <template #body="slotProps">
             <b>{{ slotProps.data.dia_chi_thuong_tru }}</b>
-          </template>
+          </template> -->
         </Column>
         <Column
-          field="noi_cap"
-          header="Nơi cấp"
+          header="Trạng thái"
           :show-filter-match-modes="false"
           sortable
         >
           <template #body="slotProps">
-            {{ slotProps.data.noi_cap || '' }}
+            {{ slotProps.data.trang_thai ? 'Đang sử dụng' : 'Còn trống' }}
           </template>
         </Column>
-        <Column
+        <!-- <Column
           field="ngay_cap"
           header="Ngày cấp"
           :show-filter-match-modes="false"
@@ -169,7 +168,7 @@
         <template #body="slotProps">
             {{ slotProps.data.ngay_cap || '' }} 
           </template>
-        </Column>
+        </Column> -->
         <Column
           :exportable="false"
           style="min-width: 9rem"
@@ -205,7 +204,7 @@
         </Column>
       </DataTable>
       <ClientOnly>
-        <HoKhauModal
+        <CanHoModal
           :is-visible="isOpenModal"
           :ho-khau="hoKhauData"
           @reload-data-table="reloadDataTable()"
@@ -225,6 +224,8 @@
   import { HoKhauService } from '~/packages/base/services/ho-khau.service';
   import { HoKhauModel } from '~/packages/base/models/dto/response/ho-khau/ho-khau.model';
   import HoKhauModal from '~/packages/cms/components/shared/ho-khau/HoKhauModal.vue';
+import { CanHoService } from '../../../../base/services/can-ho.service';
+import CanHoModal from '~/packages/cms/components/shared/can-ho/CanHoModal.vue';
   
   definePageMeta({
     layout: 'cms-default',
@@ -299,7 +300,7 @@
   
   const onLoadTable = () => {
     loading.value = true;
-    HoKhauService.HoKhauDataTable( Object.assign(filterProject.value, filters.value))
+    CanHoService.CanHoDataTable( Object.assign(filterProject.value, filters.value))
       .then((res) => {
         if (res) {
           dataHoKhau.value = res.data || [];

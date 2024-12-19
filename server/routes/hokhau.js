@@ -20,20 +20,79 @@ router.get('/', async (req, res) => {
 
 router.post('/datatable', async (req, res) => {
   try {
-    const { page = 0, rows = 10 } = req.body;
-    const first = req.body.first;
+    const { page = 0, rows = 10, first = 0 } = req.body;
+
+    const hoKhauList = await HoKhau.aggregate([
+      // Skip và Limit cho phân trang
+      { $skip: first },
+      { $limit: Number(rows) },
+
+      // Lookup để lấy thông tin chủ hộ (chuHo)
+      {
+        $lookup: {
+          from: 'NhanKhau',             // Tên collection cần join
+          localField: 'chuho_id',       // Trường trong HoKhau
+          foreignField: '_id',          // Trường _id trong NhanKhau
+          as: 'chuHo'              // Tên field chứa kết quả join
+        }
+      },
+
+      // Lookup để lấy danh sách nhân khẩu liên kết với HoKhau
+      {
+        $lookup: {
+          from: 'NhanKhau',
+          localField: '_id',            // Trường _id trong HoKhau
+          foreignField: 'hokhau_id',    // Trường hokhau_id trong NhanKhau
+          as: 'nhanKhau'                // Tên field chứa danh sách nhân khẩu
+        }
+      },
+
+      {
+        $lookup: {
+          from: 'CanHo',
+          localField: '_id', 
+          foreignField: 'hokhau_id',   
+          as: 'canHo'               
+        }
+      },
+      // Unwind chỉ cho chuHo (nếu cần) nhưng giữ nhanKhau là mảng
+      {
+        $unwind: {
+          path: '$chuHo',
+          preserveNullAndEmptyArrays: true // Giữ các bản ghi không có chủ hộ
+        }
+      },
+
+      // Project để định hình kết quả trả về
+      {
+        $project: {
+          _id: 1,
+          dia_chi_thuong_tru: 1,
+          noi_cap: 1,
+          ngay_cap: 1,
+          chuho_id: 1,
+          chuHo: {
+            ho_ten: '$chuHo.ho_ten',
+            ngay_sinh: '$chuHo.ngay_sinh',
+            gioi_tinh: '$chuHo.gioi_tinh',
+            nghe_nghiep: '$chuHo.nghe_nghiep'
+          },
+          nhanKhau: 1,
+          canHo: 1
+        }
+      }
+    ]);
 
     const totalRecords = await HoKhau.countDocuments();
-    const hoKhauList = await HoKhau.find({}).skip(first).limit(Number(rows));
-
     const totalPages = Math.ceil(totalRecords / rows);
 
+    // Trả về kết quả
     res.status(200).json({
       success: true,
       data: hoKhauList,
       rows: Number(rows),
-      first: first,
-      page: page,
+      first: Number(first),
+      page: Number(page),
       totalRecords: totalRecords,
       totalPages: totalPages,
     });
@@ -45,6 +104,8 @@ router.post('/datatable', async (req, res) => {
     });
   }
 });
+
+
 
 router.post('/', async (req, res) => {
   try {
